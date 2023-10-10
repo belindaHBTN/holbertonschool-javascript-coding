@@ -1,49 +1,29 @@
 const fs = require('fs');
-const readline = require('readline');
 
 function countStudents(path) {
   try {
-    // const data = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' });
+    const data = fs.readFileSync(path, 'utf-8');
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
+    if (lines.length === 0) {
+      throw new Error('Cannot load the database');
+    }
 
-    const stream = fs.createReadStream(path);
-    const rl = readline.createInterface({ input: stream });
-    const data = [];
+    const studentData = lines.slice(1).map((line) => line.split(','));
+    console.log(`Number of students: ${studentData.length}`);
 
-    rl.on('line', (row) => {
-      data.push(row.split('\n'));
-    });
-
-    rl.on('close', () => {
-      console.log(`Number of students: ${data.length - 1}`);
-
-      const dataStrArr = data.map((strArr) => (strArr[0]));
-
-      const dataArr = [];
-      for (const sentence of dataStrArr) {
-        dataArr.push(sentence.split(','));
+    const cs = [];
+    const swe = [];
+    for (let i = 0; i < studentData.length; i += 1) {
+      if (studentData[i][3] === 'CS') {
+        cs.push(studentData[i][0]);
+      } else if (studentData[i][3] === 'SWE') {
+        swe.push(studentData[i][0]);
       }
-
-      const csArr = [];
-      const sweArr = [];
-
-      for (let i = 0; i < dataArr.length; i += 1) {
-        if (dataArr[i][3] === 'CS') {
-          csArr.push(dataArr[i][0]);
-        } else if (dataArr[i][3] === 'SWE') {
-          sweArr.push(dataArr[i][0]);
-        }
-      }
-
-      const numCS = csArr.length;
-      const numSWE = sweArr.length;
-      const nameCS = csArr.join(', ');
-      const nameSWE = sweArr.join(', ');
-
-      console.log(`Number of students in CS: ${numCS}. List: ${nameCS}`);
-      console.log(`Number of students in SWE: ${numSWE}. List: ${nameSWE}`);
-    });
-  } catch (err) {
-    throw new Error('Cannot load the database');
+    }
+    console.log(`Number of students in CS: ${cs.length}. List: ${cs.join(', ')}`);
+    console.log(`Number of students in SWE: ${swe.length}. List: ${swe.join(', ')}`);
+  } catch (error) {
+    console.error(error.message);
   }
 }
 
