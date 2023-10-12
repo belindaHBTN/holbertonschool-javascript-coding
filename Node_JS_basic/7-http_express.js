@@ -19,7 +19,7 @@ async function countStudents(path) {
     }
     return (`Number of students: ${studentData.length}\nNumber of students in CS: ${cs.length}. List: ${cs.join(', ')}\nNumber of students in SWE: ${swe.length}. List: ${swe.join(', ')}`);
   } catch (error) {
-    throw new Error('Cannot load the database');
+    return 'Cannot load the database';
   }
 }
 
@@ -34,11 +34,7 @@ app.get('/', (req, res) => {
 app.get('/students', async (req, res) => {
   const title = 'This is the list of our students\n';
   const result = await countStudents(path);
-  try {
-    res.send(title + result);
-  } catch (error) {
-    res.send(title + error.message);
-  }
+  res.send(title + result);
 });
 
 app.listen(port, () => {
