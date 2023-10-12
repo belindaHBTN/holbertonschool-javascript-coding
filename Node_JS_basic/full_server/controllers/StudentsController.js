@@ -18,7 +18,7 @@ class StudentsController {
 
   static async getAllStudentsByMajor(request, response) {
     const path = process.argv[2];
-    const major = request.params.major;
+    const { major } = request.params;
 
     if (major !== 'CS' && major !== 'SWE') {
       response.statusCode = 500;
@@ -31,7 +31,7 @@ class StudentsController {
       response.statusCode = 200;
       response.setHeader('Content-Type', 'text/plain');
       response.end(
-        major === 'CS' ? `List: ${result.CS.join(', ')}` : `List: ${result.SWE.join(', ')}`
+        major === 'CS' ? `List: ${result.CS.join(', ')}` : `List: ${result.SWE.join(', ')}`,
       );
     } catch (error) {
       response.statusCode = 500;
