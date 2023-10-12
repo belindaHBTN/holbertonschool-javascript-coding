@@ -25,6 +25,7 @@ async function countStudents(path) {
 
 const app = express();
 const port = 1245;
+const path = process.argv[2];
 
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
@@ -32,11 +33,11 @@ app.get('/', (req, res) => {
 
 app.get('/students', async (req, res) => {
   const title = 'This is the list of our students\n';
-  const result = await countStudents('database.csv');
+  const result = await countStudents(path);
   try {
     res.send(title + result);
   } catch (error) {
-    res.send('Internal Server Error');
+    res.send(title + error.message);
   }
 });
 
