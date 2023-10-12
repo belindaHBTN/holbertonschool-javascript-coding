@@ -32,8 +32,8 @@ const app = http.createServer(async (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
+    const title = 'This is the list of our students\n';
     try {
-      const title = 'This is the list of our students\n';
       const result = await countStudents('database.csv');
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/plain');
@@ -41,7 +41,7 @@ const app = http.createServer(async (req, res) => {
     } catch (error) {
       res.statusCode = 500;
       res.setHeader('Content-Type', 'text/plain');
-      res.end('Internal Server Error');
+      res.end(title + error.message);
     }
   } else {
     res.statusCode = 404;
