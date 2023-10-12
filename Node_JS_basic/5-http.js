@@ -27,6 +27,7 @@ const hostname = 'localhost';
 const port = 1245;
 
 const app = http.createServer(async (req, res) => {
+  const path = process.argv[2];
   if (req.url === '/') {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -34,7 +35,7 @@ const app = http.createServer(async (req, res) => {
   } else if (req.url === '/students') {
     const title = 'This is the list of our students\n';
     try {
-      const result = await countStudents('database.csv');
+      const result = await countStudents(path);
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/plain');
       res.end(title + result);
